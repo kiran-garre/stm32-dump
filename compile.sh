@@ -1,10 +1,11 @@
-BIN_PATH=$1
+set -e
+
+FOLDER_PATH=$1
 
 if [[ $# -ne 1 ]]; then
     echo "Expected exactly 1 argument"
     exit 1
 fi
 
-until cp $BIN_PATH /Volumes/NOD_H723ZG/; do
-    continue
-done
+cd $FOLDER_PATH
+bash "compile_script.sh"

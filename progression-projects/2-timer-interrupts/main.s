@@ -2,20 +2,15 @@
 .cpu cortex-m7
 .thumb
 
-.equ RCC_BASE,				0x58024400
-.equ RCC_AHB4ENR,			0xe0
-.equ RCC_AHB4ENR_GPIOEEN,	1 << 4
+.include "constants.s"
 
-.equ GPIOE_BASE, 	0x58021000
-.equ GPIO_MODER,	0x00
-.equ GPIO_OTYPER,	0x04
-.equ GPIO_PUPD,		0x0c
-.equ GPIO_ODR,		0x14
-
+.align 2
 .section .text
 .global Reset_Handler
 
 Reset_Handler: 
+
+enable_led:
 
 	@ Enable GPIOE through clock
 	ldr r0, =RCC_BASE
@@ -39,17 +34,28 @@ Reset_Handler:
 	bic r1, r1, 0b11 << 2
 	str r1, [r0, GPIO_PUPD]
 
-	mov r1, 0
-	str r1, [r0, GPIO_ODR]
+enable_systick:
 
-blink:
-	ldr r1, [r0, GPIO_ODR]
-	eor r1, r1, 0b1 << 1
-	str r1, [r0, GPIO_ODR]
-	ldr r1, =0x500000
+	@ @ Bit 0: enables counter
+	@ @ Bit 1: enables SysTick exceptions
+	@ @ Bit 2: sets clock source to processor clock
+	@ ldr r0, =SYST_CSR
+	@ ldr r1, [r0]
+	@ orr r1, r1, 0b111
+	@ str r1, [r0]
 
-delay:
-	sub r1, r1, 1
-	cmp r1, 0
-	bne delay
-	b blink
+	@ @ Interrupt occurs every 10ms
+	@ ldr r0, =SYST_RVR
+	@ ldr r1, =0x5F423
+	@ str r1, [r0]
+
+	@ @ Write to CVR to clear timer
+	@ ldr r0, =SYST_CVR
+	@ mov r1, 0
+	@ str r1, [r0]
+
+enable_interrupts:
+	cpsie i
+
+b flash
+
