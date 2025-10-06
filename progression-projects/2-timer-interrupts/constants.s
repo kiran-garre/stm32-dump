@@ -9,6 +9,7 @@
 .equ GPIO_OTYPER,	0x04
 .equ GPIO_PUPD,		0x0c
 .equ GPIO_ODR,		0x14
+.equ GPIO_BSRR,		0x18
 
 .equ SYST_CSR,		0xe000e010
 .equ SYST_RVR,		0xe000e014

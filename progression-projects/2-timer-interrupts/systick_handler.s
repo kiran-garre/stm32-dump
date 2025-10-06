@@ -4,7 +4,7 @@
 
 .include "constants.s"
 
-.align 2
+.p2align 2
 .section .text
 .global SysTick_Handler
 

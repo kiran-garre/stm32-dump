@@ -3,7 +3,7 @@
 .thumb
 
 .section .vectors, "ax"
-.align 5
+.p2align 7
 .global _vectors
 
 @ Initial stack pointer
@@ -11,7 +11,7 @@
 
 _vectors:
 	.word _estack
-	.word Reset_Handler + 1		
+	.word Reset_Handler	+ 1
 	.word 0		@ NMI
 	.word 0		@ HardFault
 	.word 0		@ MemManage
@@ -28,5 +28,10 @@ _vectors:
 	.word 0 	@ Reserved
 	.word 0		@ PendSV
 	.word SysTick_Handler + 1
+
+	@ .rept 240
+	@ .word 0
+	@ .endr
+
 
 	

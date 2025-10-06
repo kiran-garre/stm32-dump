@@ -5,21 +5,32 @@
 
 .include "constants.s"
 
-.align 2
+.p2align 2
 .section .text
 .global flash
 
 flash:
-
 	ldr r0, =GPIOE_BASE
-	ldr r1, [r0, GPIO_ODR]
-	eor r1, r1, 0b1 << 1
-	mov r1, 2
-	str r1, [r0, GPIO_ODR]
-	ldr r1, =0x50000
+	cmp r1, 1 << 1	@ pin is already set
+	beq clear_pin
+
+set_pin: 
+	mov r1, 1 << 1
+	str r1, [r0, GPIO_BSRR]
+	b begin_delay
+
+clear_pin:
+	mov r1, (1 << (1 + 16))
+	str r1, [r0, GPIO_BSRR]
+
+begin_delay:
+	ldr r2, =50000
+	@ ldr r2, [r2]
 
 delay:
-	sub r1, r1, 1
-	cmp r1, 0
+	sub r2, r2, 1
+	cmp r2, 0
 	bne delay
 	b flash
+
+

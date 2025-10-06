@@ -4,11 +4,14 @@
 
 .include "constants.s"
 
-.align 2
+.p2align 2
+
 .section .text
 .global Reset_Handler
 
 Reset_Handler: 
+
+bl copy_data
 
 enable_led:
 
