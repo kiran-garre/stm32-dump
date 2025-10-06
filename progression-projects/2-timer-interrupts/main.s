@@ -13,6 +13,10 @@ Reset_Handler:
 
 bl copy_data
 
+ldr r0, =_vectors
+ldr r1, =0xE000ED08
+str r0, [r1]
+
 enable_led:
 
 	@ Enable GPIOE through clock
@@ -39,23 +43,23 @@ enable_led:
 
 enable_systick:
 
-	@ @ Bit 0: enables counter
-	@ @ Bit 1: enables SysTick exceptions
-	@ @ Bit 2: sets clock source to processor clock
-	@ ldr r0, =SYST_CSR
-	@ ldr r1, [r0]
-	@ orr r1, r1, 0b111
-	@ str r1, [r0]
+	@ Bit 0: enables counter
+	@ Bit 1: enables SysTick exceptions
+	@ Bit 2: sets clock source to processor clock
+	ldr r0, =SYST_CSR
+	ldr r1, [r0]
+	orr r1, r1, 0b111
+	str r1, [r0]
 
-	@ @ Interrupt occurs every 10ms
-	@ ldr r0, =SYST_RVR
-	@ ldr r1, =0x5F423
-	@ str r1, [r0]
+	@ Interrupt occurs every 10ms
+	ldr r0, =SYST_RVR
+	ldr r1, =0x1E847F
+	str r1, [r0]
 
-	@ @ Write to CVR to clear timer
-	@ ldr r0, =SYST_CVR
-	@ mov r1, 0
-	@ str r1, [r0]
+	@ Write to CVR to clear timer
+	ldr r0, =SYST_CVR
+	mov r1, 0
+	str r1, [r0]
 
 enable_interrupts:
 	cpsie i

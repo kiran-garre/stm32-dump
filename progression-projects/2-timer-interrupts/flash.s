@@ -24,13 +24,10 @@ clear_pin:
 	str r1, [r0, GPIO_BSRR]
 
 begin_delay:
-	ldr r2, =50000
-	@ ldr r2, [r2]
+	ldr r2, =1000000
 
 delay:
 	sub r2, r2, 1
 	cmp r2, 0
 	bne delay
 	b flash
-
-
